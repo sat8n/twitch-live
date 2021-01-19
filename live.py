@@ -19,15 +19,18 @@ STREAMER_DICTIONARY = json.load(file) # streamer: [isLive, notificationSent]
 
 # getUserID(STREAMERS[0])['id'] to get id
 def getUserID(streamer):
-    user_info = twitch.get_users(logins=streamer)
-    user_data = user_info['data'][0]
-    return user_data
+    try:
+        user_info = twitch.get_users(logins=streamer)
+        user_data = user_info['data'][0]
+        return user_data
+    except:
+        return "There are no streamers going by that name."
 
 def getChannel(streamer_id):
     channel_info = twitch.get_channel_information(streamer_id)
     return channel_info
 
-# this will return a filled data array if a steamer is live
+# this will return a data array if a steamer is live
 def getLive(streamer_id):
     stream_info = twitch.get_streams(user_id=streamer_id)
     return stream_info

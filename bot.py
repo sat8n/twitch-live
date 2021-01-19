@@ -19,6 +19,26 @@ async def test(ctx):
     await ctx.send("Test successful.")
 
 ### TO DO: User should be able to add streamers to the json file
+@bot.command(name='add_streamer')
+async def add_streamer_to_list(ctx, streamer_name):
+    file = open('streamers.json') ## duplicate code - turn this into a method (???)
+    STREAMER_DICTIONARY = json.load(file)
+
+    # add streamer
+    STREAMER_DICTIONARY[streamer_name] = [False, False]
+    # somewhere here we want to make sure that the name entered is valid
+
+    new_streamer_json = json.dumps(STREAMER_DICTIONARY, indent=4)
+    with open('streamers.json', 'w') as outfile:
+        outfile.write(new_streamer_json)
+
+    file = open('streamers.json')
+    STREAMER_DICTIONARY = json.load(file)
+    streamers = sorted(list(STREAMER_DICTIONARY.keys()))
+
+    message = "Added " + streamer_name + " to the list. "
+    message = message + "List of streamers: " + ", ".join(streamers)
+    await ctx.send(message)
 
 ### TO DO: User should be able to remove streamers from the json file
 
@@ -27,7 +47,7 @@ async def test(ctx):
 async def get_streamer_list(ctx):
     file = open('streamers.json')
     STREAMER_DICTIONARY = json.load(file)
-    streamers = list(STREAMER_DICTIONARY.keys())
+    streamers = sorted(list(STREAMER_DICTIONARY.keys()))
 
     message = "List of streamers: " + ", ".join(streamers)
     await ctx.send(message)

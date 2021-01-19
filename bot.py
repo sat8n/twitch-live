@@ -17,4 +17,14 @@ async def on_ready():
 async def test(ctx):
     await ctx.send("Test successful.")
 
+### TO DO: User should be able to add streamers to the json file
+
+### TO DO: User should be able to remove streamers from the json file
+
+### TO DO: User should be able to get a list of the current streamers they are monitoring
+
+### TO DO: There should be a method that checks 
+# if the streamer name entered is valid 
+# possibly using the method getChannel(streamer_id) to validate
+
 bot.run(TOKEN)

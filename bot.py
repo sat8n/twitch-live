@@ -18,7 +18,7 @@ async def on_ready():
 async def test(ctx):
     await ctx.send("Test successful.")
 
-### TO DO: User should be able to add streamers to the json file
+### Description: User should be able to add streamers to the json file
 @bot.command(name='add_streamer')
 async def add_streamer_to_list(ctx, streamer_name):
     file = open('streamers.json') ## duplicate code - turn this into a method (???)
@@ -40,7 +40,27 @@ async def add_streamer_to_list(ctx, streamer_name):
     message = message + "List of streamers: " + ", ".join(streamers)
     await ctx.send(message)
 
-### TO DO: User should be able to remove streamers from the json file
+### Description: User should be able to remove streamers from the json file
+@bot.command(name='remove_streamer')
+async def remove_streamer_from_list(ctx, streamer_name):
+    file = open('streamers.json')
+    STREAMER_DICTIONARY = json.load(file)
+
+    # remove streamer
+    ## you need to check if the name is actually in the dictionary
+    STREAMER_DICTIONARY.pop(streamer_name)
+
+    new_streamer_json = json.dumps(STREAMER_DICTIONARY, indent=4)
+    with open('streamers.json', 'w') as outfile:
+        outfile.write(new_streamer_json)
+
+    file = open('streamers.json')
+    STREAMER_DICTIONARY = json.load(file)
+    streamers = sorted(list(STREAMER_DICTIONARY.keys()))
+
+    message = "Removed " + streamer_name + " from the list. "
+    message = message + "List of streamers: " + ", ".join(streamers)
+    await ctx.send(message)
 
 ### TO DO: User should be able to get a list of the current streamers they are monitoring
 @bot.command(name='streamer_list')

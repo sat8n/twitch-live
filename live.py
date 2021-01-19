@@ -1,6 +1,7 @@
 import urllib.request
 import os
 from dotenv import load_dotenv
+import json
 
 from twitchAPI.twitch import Twitch
 
@@ -10,6 +11,11 @@ SECRET = os.getenv('TWITCH_SECRET')
 
 twitch = Twitch(CLIENT_ID, SECRET)
 twitch.authenticate_app([])
+
+### TO DO: user should be able to modify file this later through commands directed to the discord bot
+# reads from the json file
+file = open('streamers.json')
+STREAMER_DICTIONARY = json.load(file) # streamer: [isLive, notificationSent]
 
 # getUserID(STREAMERS[0])['id'] to get id
 def getUserID(streamer):
@@ -25,18 +31,6 @@ def getChannel(streamer_id):
 def getLive(streamer_id):
     stream_info = twitch.get_streams(user_id=streamer_id)
     return stream_info
-
-### TO DO: move this to a separate text file for the program to read from
-STREAMER_DICTIONARY = { # streamer: [isLive, notificationSent]
-    "sodapoppin": [False, False],
-    "anton": [False, False],
-    "MOONMOON": [False, False],
-    "summit1g": [False, False],
-    "mitchjones": [False, False],
-    "watchmeblink": [False, False],
-    "spoonkid": [False, False],
-    "dafran": [False, False]
-}
 
 # checkStreamers(list(STREAMER_DICTIONARY.keys()))
 def checkStreamers(streamers):

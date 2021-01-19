@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+import json
 
 import discord
 from discord.ext import commands
@@ -22,6 +23,16 @@ async def test(ctx):
 ### TO DO: User should be able to remove streamers from the json file
 
 ### TO DO: User should be able to get a list of the current streamers they are monitoring
+@bot.command(name='streamer_list')
+async def get_streamer_list(ctx):
+    file = open('streamers.json')
+    STREAMER_DICTIONARY = json.load(file)
+    streamers = list(STREAMER_DICTIONARY.keys())
+
+    message = "List of streamers: " + ", ".join(streamers)
+    await ctx.send(message)
+
+### TO DO: User should be able to get a list of the current live streamers
 
 ### TO DO: There should be a method that checks 
 # if the streamer name entered is valid 

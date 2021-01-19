@@ -24,8 +24,9 @@ def getUserID(streamer):
         user_data = user_info['data'][0]
         return user_data
     except:
-        return "There are no streamers going by that name."
+        return False # no streamers going by the name entered
 
+### this is being used by checkStreamers method
 # this will return a data array if a steamer is live
 def getLive(streamer_id):
     stream_info = twitch.get_streams(user_id=streamer_id)

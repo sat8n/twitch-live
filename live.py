@@ -26,10 +26,6 @@ def getUserID(streamer):
     except:
         return "There are no streamers going by that name."
 
-def getChannel(streamer_id):
-    channel_info = twitch.get_channel_information(streamer_id)
-    return channel_info
-
 # this will return a data array if a steamer is live
 def getLive(streamer_id):
     stream_info = twitch.get_streams(user_id=streamer_id)

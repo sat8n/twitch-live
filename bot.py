@@ -6,6 +6,7 @@ import discord
 from discord.ext import commands
 
 import live as twitch
+import methods
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -23,9 +24,7 @@ async def test(ctx):
 ### Description: User should be able to add streamers to the json file
 @bot.command(name='add_streamer')
 async def add_streamer_to_list(ctx, streamer_name):
-    file = open('streamers.json') ## duplicate code - turn this into a method (???)
-    STREAMER_DICTIONARY = json.load(file)
-
+    STREAMER_DICTIONARY = methods.openJSON()
     message = ""
 
     # add streamer
@@ -40,8 +39,7 @@ async def add_streamer_to_list(ctx, streamer_name):
     else:
         message = "Unable to add " + streamer_name + " as there are no streamers going by that name. "
 
-    file = open('streamers.json')
-    STREAMER_DICTIONARY = json.load(file)
+    STREAMER_DICTIONARY = methods.openJSON()
     streamers = sorted(list(STREAMER_DICTIONARY.keys()))
     
     message = message + "List of streamers: " + ", ".join(streamers)
@@ -50,8 +48,7 @@ async def add_streamer_to_list(ctx, streamer_name):
 ### Description: User should be able to remove streamers from the json file
 @bot.command(name='remove_streamer')
 async def remove_streamer_from_list(ctx, streamer_name):
-    file = open('streamers.json')
-    STREAMER_DICTIONARY = json.load(file)
+    STREAMER_DICTIONARY = methods.openJSON()
 
     # remove streamer
     ## you need to check if the name is actually in the dictionary
@@ -61,8 +58,7 @@ async def remove_streamer_from_list(ctx, streamer_name):
     with open('streamers.json', 'w') as outfile:
         outfile.write(new_streamer_json)
 
-    file = open('streamers.json')
-    STREAMER_DICTIONARY = json.load(file)
+    STREAMER_DICTIONARY = methods.openJSON()
     streamers = sorted(list(STREAMER_DICTIONARY.keys()))
 
     message = "Removed " + streamer_name + " from the list. "
@@ -72,8 +68,7 @@ async def remove_streamer_from_list(ctx, streamer_name):
 ### Description: User should be able to get a list of the current streamers they are monitoring
 @bot.command(name='streamer_list')
 async def get_streamer_list(ctx):
-    file = open('streamers.json')
-    STREAMER_DICTIONARY = json.load(file)
+    STREAMER_DICTIONARY = methods.openJSON()
     streamers = sorted(list(STREAMER_DICTIONARY.keys()))
 
     message = "List of streamers: " + ", ".join(streamers)

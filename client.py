@@ -5,6 +5,7 @@ import discord
 import asyncio
 
 import methods
+import live as twitch
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -40,7 +41,21 @@ class TwitchLive(discord.Client):
 
             await asyncio.sleep(60) # runs every 60 seconds
 
-### TO DO: a method that updates the JSON file
+### Description: this method uses the Twitch API to check if a streamer is live, and updates the JSON file accordingly
+### streamer_list = { 'name': [isLive, isNotified] }
+def check_live_streamers_and_update(streamer_list):
+    for streamer in streamer_list:
+        streamer_id = twitch.getUserID(streamer)['id']
+        streamer_info = twitch.getLive(streamer_id)
+
+        # if a streamer is live
+        if streamer_info['data']:
+            streamer_list[streamer][0] = True # set isLive to true
+        elif not streamer_info['data']: # if not live
+            streamer_list[streamer][0] = False # set isLive to false
+    
+    # update the json file
+    methods.writeJSON(streamer_list)
 
 ### TO DO: a method that reads the JSON and returns whether or not to notify the user(?)
 

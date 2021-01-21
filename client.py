@@ -23,21 +23,28 @@ class TwitchLive(discord.Client):
 
     async def check_streamers_live(self):
         await self.wait_until_ready()
-
         channel = self.get_channel(CHANNEL)
+        twitch_url = "https://www.twitch.tv/"
+
         while not self.is_closed():
-            ### every 60 seconds, read the json file
-            # for each key, if isLive == true and isNotified == false then notify the user
-            STREAMER_LIST = methods.openJSON()
+            # every 60 seconds, we want to check for live streamers
+            #STREAMER_LIST = methods.openJSON()
+            STREAMER_LIST = check_live_streamers_and_update(methods.openJSON())
+
             for streamer in STREAMER_LIST:
-                if (STREAMER_LIST[streamer][0] and not STREAMER_LIST[streamer][1]): # isLive == true and isNotified == false
+                # isLive == true and isNotified == false
+                if (STREAMER_LIST[streamer][0] and not STREAMER_LIST[streamer][1]):
                     STREAMER_LIST[streamer][1] = True
                     methods.writeJSON(STREAMER_LIST)
-                    await channel.send(streamer + " is live")
+
+                    message = "🟢 " + streamer + " is live! " + twitch_url + streamer
+                    await channel.send(message)
                 elif (STREAMER_LIST[streamer][1] and not STREAMER_LIST[streamer][0]): # isLive == false and isNotified == true
                     STREAMER_LIST[streamer][1] = False
                     methods.writeJSON(STREAMER_LIST)
-                    await channel.send(streamer + " has gone offline")
+
+                    message = "🔴 " + streamer + " has gone offline."
+                    await channel.send(message)
 
             await asyncio.sleep(60) # runs every 60 seconds
 
@@ -56,6 +63,7 @@ def check_live_streamers_and_update(streamer_list):
     
     # update the json file
     methods.writeJSON(streamer_list)
+    return streamer_list
 
 ### TO DO: a method that reads the JSON and returns whether or not to notify the user(?)
 

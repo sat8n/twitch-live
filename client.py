@@ -18,9 +18,6 @@ class TwitchLive(discord.Client):
         # create the background task and run it in the background
         self.bg_task = self.loop.create_task(self.check_streamers_live())
 
-    async def on_ready(self):
-        print(f'{self.user.name} has connected to Discord!')
-
     async def check_streamers_live(self):
         await self.wait_until_ready()
         channel = self.get_channel(CHANNEL)
@@ -68,4 +65,9 @@ def check_live_streamers_and_update(streamer_list):
 ### TO DO: a method that reads the JSON and returns whether or not to notify the user(?)
 
 client = TwitchLive()
+
+@client.event
+async def on_ready():
+    print(f'{client.user.name} has connected to Discord!')
+
 client.run(TOKEN)

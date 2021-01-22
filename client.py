@@ -117,6 +117,22 @@ async def on_message(message):
 
         await message.channel.send(client_message)
 
+    # get list of current live streamers
+    if message.content.startswith('?live'):
+        STREAMER_LIST = methods.openJSON()
+        client_message = "There are no live streamers."
+        live_streamers = []
+
+        for streamer in STREAMER_LIST:
+            if STREAMER_LIST[streamer][0]:
+                live_streamers.append(streamer)
+
+        if live_streamers:
+            live_streamers = sorted(live_streamers)
+            client_message = "List of current live streamers: " + ", ".join(live_streamers)
+
+        await message.channel.send(client_message)
+
     # list the available commands
     if message.content.startswith('?commands'):
         list_of_commands = [

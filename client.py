@@ -90,6 +90,22 @@ async def on_message(message):
         
         await message.channel.send(client_message)
 
+    # remove streamer
+    if message.content.startswith('?rm'):
+        streamer = message.content.split()[1]
+        STREAMER_LIST = methods.openJSON()
+        client_message = "Unable to remove " + streamer + "."
+
+        if twitch.getUserID(streamer):
+            streamer = twitch.getUserID(streamer)['display_name']
+
+            if streamer in STREAMER_LIST:
+                STREAMER_LIST.pop(streamer)
+                methods.writeJSON(STREAMER_LIST)
+                client_message = "Removed " + streamer + " from the list."
+
+        await message.channel.send(client_message)
+
     # list the available commands
     if message.content.startswith('?commands'):
         list_of_commands = [

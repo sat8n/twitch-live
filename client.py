@@ -75,6 +75,21 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # add streamer
+    if message.content.startswith('?add'):
+        streamer = message.content.split()[1]
+        STREAMER_LIST = methods.openJSON()
+        client_message = "Unable to add " + streamer + "."
+
+        if twitch.getUserID(streamer):
+            # we want to use the streamer's display name in the dictionary
+            streamer = twitch.getUserID(streamer)['display_name']
+            STREAMER_LIST[streamer] = [False, False]
+            methods.writeJSON(STREAMER_LIST)
+            client_message = "Added " + streamer + " to the list."
+        
+        await message.channel.send(client_message)
+
     # list the available commands
     if message.content.startswith('?commands'):
         list_of_commands = [

@@ -70,4 +70,22 @@ client = TwitchLive()
 async def on_ready():
     print(f'{client.user.name} has connected to Discord!')
 
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+
+    # list the available commands
+    if message.content.startswith('?commands'):
+        list_of_commands = [
+            "Commands:",
+            "?add <name>: Description",
+            "?rm <name>: Description",
+            "?list: Description",
+            "?live: Description"
+        ]
+
+        client_message = '\n'.join(list_of_commands)
+        await message.channel.send(client_message)
+
 client.run(TOKEN)
